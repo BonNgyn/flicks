@@ -8,6 +8,7 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -32,6 +33,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             delegate: nil,
             delegateQueue: NSOperationQueue.mainQueue()
         )
+    
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+
         
         let task: NSURLSessionDataTask = session.dataTaskWithRequest(request, completionHandler: { (dataOrNil, response, error) in
             if let data = dataOrNil {
@@ -40,6 +44,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     
                     self.movies = responseDictionary["results"] as? [NSDictionary]
                     self.tableView.reloadData()
+                    MBProgressHUD.hideHUDForView(self.view, animated: true)
                 }
             }
         })
@@ -51,6 +56,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let movies = movies {
@@ -67,8 +73,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let overview = movie["overview"] as! String
         let posterPath = movie["poster_path"] as! String
         let baseUrl = "http://image.tmdb.org/t/p/w500"
-        
         let imageUrl = NSURL(string: baseUrl + posterPath)
+        
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
         cell.posterView.setImageWithURL(imageUrl!)
