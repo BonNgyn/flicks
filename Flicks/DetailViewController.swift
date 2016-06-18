@@ -10,6 +10,7 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
+    @IBOutlet weak var detailPosterView: UIImageView!
     @IBOutlet weak var detailLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +22,18 @@ class DetailViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func getUrl() -> NSURLRequest {
+        let apiKey = "f5517dfab5351604b6b63fa1e9c3cc0b"
+        let url = NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
+        let request = NSURLRequest(
+            URL: url!,
+            cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData,
+            timeoutInterval: 10)
+        
+        return request
+    }
+
     
 
     /*
